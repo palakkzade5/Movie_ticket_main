@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Admin - Movie List</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+<div class="container mt-5">
+    <h2>Movies</h2>
+    <div class="mb-3">
+        <a href="{% url 'booking:admin_movie_create' %}" class="btn btn-primary">Add Movie</a>
+        <a href="{% url 'booking:admin_show_list' %}" class="btn btn-secondary float-end">Back to Shows</a>
+    </div>
+    {% if movies %}
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Title</th>
+                    <th>Duration (min)</th>
+                    <th>Genre</th>
+                    <th>Director</th>
+                    <th>Release Date</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for movie in movies %}
+                <tr>
+                    <td>{{ movie.title }}</td>
+                    <td>{{ movie.duration }}</td>
+                    <td>{{ movie.genre }}</td>
+                    <td>{{ movie.director }}</td>
+                    <td>{{ movie.release_date }}</td>
+                    <td>
+                        <a href="{% url 'booking:admin_movie_edit' movie.id %}" class="btn btn-sm btn-warning">Edit</a>
+                        <form action="{% url 'booking:admin_movie_delete' movie.id %}" method="post" style="display:inline;">
+                            {% csrf_token %}
+                            <button type="submit" class="btn btn-sm btn-danger" onclick="return confirm('Are you sure you want to delete this movie?');">Delete</button>
+                        </form>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% else %}
+        <p>No movies available.</p>
+    {% endif %}
+</div>
+</body>
+</html>
